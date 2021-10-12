@@ -1,5 +1,6 @@
 **
 
+!/resource/
 !/src/
 !package.json
 !yarn.lock

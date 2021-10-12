@@ -1,7 +1,9 @@
 import createConnectionPool, { ConnectionPool, sql } from '@databases/pg'
-import axios, { AxiosResponse } from 'axios'
+import { Frequency } from '@zhquiz/zhlevel'
 
 export async function populate(db: ConnectionPool) {
+  const f = new Frequency()
+
   await db.tx(async (db) => {
     const batchSize = 10000
 
@@ -13,12 +15,7 @@ export async function populate(db: ConnectionPool) {
       console.log(i)
       const sublot = lots.slice(i, i + batchSize)
 
-      const { data: fMap } = await axios.post<
-        any,
-        AxiosResponse<Record<string, number>>
-      >('https://cdn.zhquiz.cc/api/wordfreq?lang=zh', {
-        q: [...new Set(sublot.flatMap((p) => p.entry))]
-      })
+      const fMap = await f.vFreq(...new Set(sublot.flatMap((p) => p.entry)))
       for (const p of sublot) {
         p.frequency = Math.min(...p.entry.map((el: string) => fMap[el] || 0))
       }

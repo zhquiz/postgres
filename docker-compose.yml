@@ -1,0 +1,28 @@
+version: '3'
+services:
+  db:
+    restart: always
+    image: patarapolw/zhquiz-db
+    build: ./packages/postgres
+    environment:
+      POSTGRES_USER: &pguser postgres
+      POSTGRES_PASSWORD: &pgpass postgrespass
+      POSTGRES_DB: &pgdb zhquiz
+
+      TZ: &tz Asia/Bangkok
+      PGTZ: *tz
+    ports:
+      - 5433:5432 # pgAdmin connection port
+
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+
+      - ./resource:/app/resource
+
+      - ./initdb.d:/docker-entrypoint-initdb.d
+      - ./node_modules:/app/node_modules
+      - ./library:/app/library
+      - ./assets:/app/assets
+      - ./src:/app/src
+
+      - ~/.postgresql:/root/.postgresql
