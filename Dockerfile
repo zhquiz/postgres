@@ -33,14 +33,13 @@ RUN mkdir build && cd build && cmake -DPostgreSQL_TYPE_INCLUDE_DIR=/usr/include/
 # nodejs14
 # Install nodejs 14
 WORKDIR /app
-RUN apt-get install -y dirmngr apt-transport-https lsb-release ca-certificates jq
+RUN apt-get install -y dirmngr apt-transport-https lsb-release ca-certificates
 RUN curl -sSL https://deb.nodesource.com/setup_14.x | bash -
 RUN apt-get install -y nodejs gcc g++ make
 
 RUN npm i -g yarn
 COPY package.json yarn.lock ./
 RUN yarn --frozen-lockfile
-# COPY . .
-# RUN yarn build
-# RUN jq 'del(.devDependencies)' package.json > tmp.json && mv tmp.json package.json
-# RUN yarn --frozen-lockfile
+RUN yarn build
+RUN node -e 'const pkg = require("./package.json"); delete pkg.devDependencies; require("fs").writeFileSync("./package.json", JSON.stringify(pkg))'
+RUN yarn --frozen-lockfile

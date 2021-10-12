@@ -5,8 +5,13 @@ pg_ctl -o "-c listen_addresses='localhost'" -w restart
 
 cd /app
 
-if [[ -d "./lib" ]]; then
-    node ./lib/init.js
-else
-    yarn ts ./src/init.ts
+if [[ ! -d ./resource/out ]]; then
+    git clone --depth=1 https://github.com/zhquiz/resource.git
+    cd resource
+    node -e 'const pkg = require("./package.json"); delete pkg.devDependencies; require("fs").writeFileSync("./package.json", JSON.stringify(pkg))'
+    yarn --frozen-lockfile
+    node .
+    cd -
 fi
+
+node ./lib/init.js

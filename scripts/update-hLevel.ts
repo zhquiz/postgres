@@ -1,5 +1,5 @@
 import createConnectionPool, { ConnectionPool, sql } from '@databases/pg'
-import { Level } from '@patarapolw/zhlevel'
+import { Level } from '@zhquiz/zhlevel'
 
 export async function populate(db: ConnectionPool) {
   const lv = new Level()
