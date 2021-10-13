@@ -6,6 +6,7 @@ CREATE TABLE "entry" (
     "type"          TEXT NOT NULL,
     "entry"         TEXT[] NOT NULL CHECK ("entry"[1] IS NOT NULL),
     "reading"       TEXT[] NOT NULL DEFAULT '{}'::TEXT[],
+    "english"       TEXT[] NOT NULL DEFAULT '{}'::TEXT[],
     "translation"   TEXT[] NOT NULL DEFAULT '{}'::TEXT[],
     "description"   TEXT NOT NULL DEFAULT '',
     "tag"           TEXT[] NOT NULL DEFAULT '{}'::TEXT[],
